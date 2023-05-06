@@ -4,7 +4,14 @@ STRICT_CFLAGS=-Wall -Werror -Wextra -std=c11 -pedantic
 STRICT_CFLAGS=-Wall -std=c++17 -Wextra -pedantic -Werror
 
 # GCOVR_CFLAGS=$(shell pkg-config --cflags gcovr)
+# GCOVR_CFLAGS=$(shell pkg-config --libs gcovr)
 GCOVR_CFLAGS=-fprofile-arcs -ftest-coverage -fPIC
+GCOVR_LFLAGS=-lgcov
+
+# GTEST_CFLAGS=$(shell pkg-config --cflags gtest)
+# GTEST_LFLAGS=$(shell pkg-config --libs gtest)
+GTEST_LFLAGS=-lgtest -lgtest_main
+
 
 all: build
 
@@ -13,11 +20,22 @@ all: build
 s21_matrix_oop.a: s21_matrix_oop.oa 
 		ar rcs $@ $^
 
+tests/tests_add.o: tests/tests_add.cpp s21_matrix_oop.h
+		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
+
+tests/tests_main.o: tests/tests_main.cpp s21_matrix_oop.h
+		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
+
 #TODO
-test:
+test: tests/tests_main.exe
+		./tests/tests_main.exe
+
+tests/tests_main.exe: s21_matrix_oop.o tests/tests_main.o tests/tests_add.o
+		$(CC) -o $@ $^ $(GTEST_LFLAGS) $(GCOVR_LFLAGS)
+		
 
 s21_matrix_oop.o: s21_matrix_oop.cpp s21_matrix_oop.h
-		$(CC) -c $(STRICT_CFLAGS) $< -o $@
+		$(CC) -c $(STRICT_CFLAGS) $< -o $@ $(GCOVR_CFLAGS)
 
 s21_transpose.o: s21_transpose.c s21_matrix.h s21_common.h
 		$(CC) -c $(STRICT_CFLAGS) $< -o $@ $(GCOVR_CFLAGS)
@@ -33,3 +51,4 @@ s21_matrix_oop.oa: s21_matrix_oop.cpp s21_matrix_oop.h
 clean:
 		rm -rf *.o *.exe *.out *.oa
 		rm -rf tests/*.o tests/*.exe tests/*.out
+		rm -rf *.gcno *.gcda

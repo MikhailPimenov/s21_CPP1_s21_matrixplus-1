@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-S21Matrix::S21Matrix() : rows_{0}, columns_{0}, matrix_{nullptr} {
+S21Matrix::S21Matrix() noexcept : rows_{0}, columns_{0}, matrix_{nullptr} {
 
 }
 
@@ -10,7 +10,14 @@ S21Matrix::S21Matrix(int rows, int columns) {
     if (rows < 0 || columns < 0)
         throw -1;
     allocate(rows, columns);
+    Fill();
 }
+
+S21Matrix::S21Matrix(int dimension) : S21Matrix(dimension, dimension) {
+
+}
+
+
 
 S21Matrix::~S21Matrix() {
     delete matrix_;
@@ -47,10 +54,15 @@ int S21Matrix::GetColumns() const noexcept {
     return columns_;
 }
 
+void S21Matrix::Fill(double element) noexcept {
+    for (int row = 0; row < rows_; ++row)
+        for (int column = 0; column < columns_; ++column)
+            matrix_[row][column] = element;
+}
 
 void S21Matrix::Print(const char* space, const char* endline) const noexcept {
     for (int row = 0; row < rows_; ++row) {
-        for (int column = 0; column = columns_; ++column) {
+        for (int column = 0; column < columns_; ++column) {
             std::cout << matrix_[row][column] << space;
         }
         std::cout << endline;

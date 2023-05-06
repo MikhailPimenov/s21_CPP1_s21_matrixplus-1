@@ -9,10 +9,11 @@ class S21Matrix final {
         double **matrix_ = nullptr;         // Pointer to the memory where the matrix is allocated
 
     public:
-        S21Matrix() noexcept;              // Default constructor
-        ~S21Matrix();             // Destructor
+        S21Matrix() noexcept;               // Default constructor
+        ~S21Matrix();                       // Destructor
 
         S21Matrix(int rows, int columns);
+        S21Matrix(int dimension);           // Constructor for square matrix
 
 
         int GetRows() const noexcept;
@@ -23,7 +24,8 @@ class S21Matrix final {
         // Other methods..
 
 
-        void Print(const char* space, const char* endline) const noexcept;
+        void Fill(double element = 0.0) noexcept;
+        void Print(const char* space = " ", const char* endline = "\n") const noexcept;
 
 
     private:
