@@ -46,6 +46,32 @@ void S21Matrix::deallocate() noexcept {
     columns_ = 0;
 }
 
+// void S21Matrix::SetRows(int rows) {
+//     if (rows == rows_)
+//         return;
+
+//     if (rows < 0)
+//         throw -1;
+
+    
+//     S21Matrix temporary(rows, columns_);
+
+//     const int minRow = rows < rows_ ? rows : rows_;
+
+//     for (int row = 0; row < minRow; ++row) {
+//         for (int column = 0; column < columns_; ++column) {
+//             temporary(row, column) = operator()(row, column);
+//         }
+//     }
+
+//     operator=(std::move(temporary));
+// }
+
+// void S21Matrix::SetColumns(int rows) {
+// }
+
+
+
 int S21Matrix::GetRows() const noexcept {
     return rows_;
 }
@@ -53,6 +79,24 @@ int S21Matrix::GetRows() const noexcept {
 int S21Matrix::GetColumns() const noexcept {
     return columns_;
 }
+
+// S21Matrix& S21Matrix::operator=(S21Matrix&& other) noexcept {
+// }
+
+
+// TODO: exception
+double& S21Matrix::operator()(int row, int column) {
+    if (row >= rows_ || column >= columns_)
+        throw -1;
+
+    return matrix_[row][column];
+}
+double S21Matrix::operator()(int row, int column) const {
+    return operator()(row, column);
+}
+
+
+
 
 void S21Matrix::Fill(double element) noexcept {
     for (int row = 0; row < rows_; ++row)
