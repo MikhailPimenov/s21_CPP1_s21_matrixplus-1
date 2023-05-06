@@ -22,6 +22,8 @@ s21_matrix_oop.a: s21_matrix_oop.oa
 
 tests/tests_add.o: tests/tests_add.cpp s21_matrix_oop.h
 		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
+tests/tests_equal.o: tests/tests_equal.cpp s21_matrix_oop.h
+		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
 
 tests/tests_main.o: tests/tests_main.cpp s21_matrix_oop.h
 		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
@@ -30,7 +32,7 @@ tests/tests_main.o: tests/tests_main.cpp s21_matrix_oop.h
 test: tests/tests_main.exe
 		./tests/tests_main.exe
 
-tests/tests_main.exe: s21_matrix_oop.o tests/tests_main.o tests/tests_add.o
+tests/tests_main.exe: s21_matrix_oop.o tests/tests_main.o tests/tests_add.o tests/tests_equal.o
 		$(CC) -o $@ $^ $(GTEST_LFLAGS) $(GCOVR_LFLAGS)
 		
 

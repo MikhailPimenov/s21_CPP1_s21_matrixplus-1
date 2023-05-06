@@ -20,44 +20,71 @@ class S21Matrix final {
 
         // rule of five
         ~S21Matrix();                       // Destructor
+        //// TODO: test?
         S21Matrix(const S21Matrix& other);
+        //// TODO: test?
         S21Matrix(S21Matrix&& other);
-        S21Matrix& operator=(const S21Matrix& other) noexcept;
+        //// TODO: test?
+        S21Matrix& operator=(const S21Matrix& other);
+        //// TODO: test?
         S21Matrix& operator=(S21Matrix&& other) noexcept;
         
 
 
         // getters and setters
+        // TODO:
         // void SetRows(int rows);
+        // TODO:
         int GetRows() const noexcept;
+        // TODO:
         // void SetColumns(int columns);
+        // TODO:
         int GetColumns() const noexcept;
 
 
         // core methods
+        //// TODO: test
         bool EqMatrix(const S21Matrix& other) const noexcept;
+        // TODO:
         void SumMatrix(const S21Matrix& other);
+        // TODO:
         void SubMatrix(const S21Matrix& other);
+        // TODO:
         void MulNumber(const double number) noexcept;
+        // TODO:
         void MulMatrix(const S21Matrix& other);
+        // TODO:
         S21Matrix Transpose() noexcept;
+        // TODO:
         S21Matrix CalcComplements();
+        // TODO:
         double Determinant() const;
+        // TODO:
         S21Matrix InverseMatrix() const;
 
 
 
+        // TODO:
         friend S21Matrix operator+(const S21Matrix& left, const S21Matrix& right);
+        // TODO:
         friend S21Matrix operator-(const S21Matrix& left, const S21Matrix& right);
+        // TODO:
         friend S21Matrix operator*(const S21Matrix& left, const S21Matrix& right);
-        friend bool operator==(const S21Matrix& left, const S21Matrix& right) noexcept;
+        // TODO:
+        friend bool operator==(const S21Matrix& left, const S21Matrix& right) noexcept;  // don't have to be friend
 
+        // TODO:
         S21Matrix& operator+=(const S21Matrix& other);
+        // TODO:
         S21Matrix& operator-=(const S21Matrix& other);
+        // TODO:
         S21Matrix& operator*=(const S21Matrix& other);
+        // TODO:
         S21Matrix& operator*=(const double number);
         
+        // TODO:
         double& operator()(int row, int column);
+        // TODO:
         double operator()(int row, int column) const;
 
 
