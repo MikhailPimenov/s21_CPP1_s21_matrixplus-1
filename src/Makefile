@@ -1,16 +1,20 @@
-CC = g++
+CC=g++
 # STRICT_CFLAGC = -Wall
 STRICT_CFLAGS=-Wall -Werror -Wextra -std=c11 -pedantic
 STRICT_CFLAGS=-Wall -std=c++17 -Wextra -pedantic -Werror
+
 
 # GCOVR_CFLAGS=$(shell pkg-config --cflags gcovr)
 # GCOVR_CFLAGS=$(shell pkg-config --libs gcovr)
 GCOVR_CFLAGS=-fprofile-arcs -ftest-coverage -fPIC
 GCOVR_LFLAGS=-lgcov
 
+
 # GTEST_CFLAGS=$(shell pkg-config --cflags gtest)
 # GTEST_LFLAGS=$(shell pkg-config --libs gtest)
 GTEST_LFLAGS=-lgtest -lgtest_main
+
+REPORT_DIRECTORY=report
 
 
 all: build
@@ -20,7 +24,7 @@ all: build
 s21_matrix_oop.a: s21_matrix_oop.oa 
 		ar rcs $@ $^
 
-tests/tests_add.o: tests/tests_add.cpp s21_matrix_oop.h
+tests/tests_sum.o: tests/tests_sum.cpp s21_matrix_oop.h
 		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
 tests/tests_equal.o: tests/tests_equal.cpp s21_matrix_oop.h
 		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
@@ -32,7 +36,14 @@ tests/tests_main.o: tests/tests_main.cpp s21_matrix_oop.h
 test: tests/tests_main.exe
 		./tests/tests_main.exe
 
-tests/tests_main.exe: s21_matrix_oop.o tests/tests_main.o tests/tests_add.o tests/tests_equal.o
+gcov_report: test
+		mkdir -p $(REPORT_DIRECTORY)
+		gcovr . --html --html-details -o $(REPORT_DIRECTORY)/coverage_report.html
+		START "" $(REPORT_DIRECTORY)/coverage_report.functions.html  
+# open $(REPORT_DIRECTORY)/coverage_report.functions.html
+
+
+tests/tests_main.exe: s21_matrix_oop.o tests/tests_main.o tests/tests_sum.o tests/tests_equal.o
 		$(CC) -o $@ $^ $(GTEST_LFLAGS) $(GCOVR_LFLAGS)
 		
 

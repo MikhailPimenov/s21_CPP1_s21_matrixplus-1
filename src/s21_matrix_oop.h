@@ -1,8 +1,7 @@
 #ifndef __S21_MATRIX_OOP_H_
 #define __S21_MATRIX_OOP_H_
 
-// using bubble = double;
-// typedef double bubble;
+#include <initializer_list>
 
 class S21Matrix final {
     private:
@@ -16,7 +15,8 @@ class S21Matrix final {
 
         S21Matrix() noexcept;               // Default constructor
         S21Matrix(int rows, int columns);
-        explicit S21Matrix(int dimension);           // Constructor for square matrix
+        explicit S21Matrix(int dimension);  // Constructor for square matrix
+        S21Matrix(const std::initializer_list<std::initializer_list<double>>& list);
 
         // rule of five
         ~S21Matrix();                       // Destructor
@@ -43,13 +43,12 @@ class S21Matrix final {
 
 
         // core methods
-        //// TODO: test
         bool EqMatrix(const S21Matrix& other) const noexcept;
-        // TODO:
+        //// TODO: test
         void SumMatrix(const S21Matrix& other);
-        // TODO:
+        //// TODO: test
         void SubMatrix(const S21Matrix& other);
-        // TODO:
+        //// TODO: test
         void MulNumber(const double number) noexcept;
         // TODO:
         void MulMatrix(const S21Matrix& other);
@@ -70,7 +69,6 @@ class S21Matrix final {
         friend S21Matrix operator-(const S21Matrix& left, const S21Matrix& right);
         // TODO:
         friend S21Matrix operator*(const S21Matrix& left, const S21Matrix& right);
-        // TODO:
         friend bool operator==(const S21Matrix& left, const S21Matrix& right) noexcept;  // don't have to be friend
 
         // TODO:
@@ -78,9 +76,9 @@ class S21Matrix final {
         // TODO:
         S21Matrix& operator-=(const S21Matrix& other);
         // TODO:
-        S21Matrix& operator*=(const S21Matrix& other);
+        S21Matrix& operator*=(const double number) noexcept;
         // TODO:
-        S21Matrix& operator*=(const double number);
+        S21Matrix& operator*=(const S21Matrix& other);
         
         // TODO:
         double& operator()(int row, int column);
