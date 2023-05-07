@@ -203,7 +203,28 @@ S21Matrix S21Matrix::Transpose() const noexcept {
             result.matrix_[column][row] = matrix_[row][column];
     return result;
 }
+
+// S21Matrix S21Matrix::CalcComplements() const {
+    // return 
+// }
+
+
+
+
+
+
+
+
+
         
+double S21Matrix::Determinant() const {
+    if (rows_ != columns_)
+        throw std::range_error("Matrix is not square, it is impossible to calculate determinant!");    
+   
+
+    return determinantRecursive(*this);
+}
+          
 
 
 
@@ -245,8 +266,12 @@ double& S21Matrix::operator()(int row, int column) {
     return matrix_[row][column];
 }
 double S21Matrix::operator()(int row, int column) const {
-    return operator()(row, column);
+    if (row >= rows_ || column >= columns_)
+        throw std::out_of_range("Rows or/and columns out of range!");
+
+    return matrix_[row][column];
 }
+
 
 
 
@@ -294,4 +319,45 @@ void S21Matrix::copyFromTo(const S21Matrix& source, S21Matrix& destination) noex
     for (int row = 0; row < source.rows_; ++row) 
         for (int column = 0; column < source.columns_; ++column)
             destination.matrix_[row][column] = source.matrix_[row][column];
+}
+
+double S21Matrix::determinantRecursive(const S21Matrix& m) {
+    assert(m.rows_ == m.columns_ && "Matrix is not square, it is impossible to calculate determinant!");
+    if (m.rows_ <= 1)
+        return m.matrix_[0][0];
+
+    if (m.rows_ == 2)
+        return m.matrix_[0][0] * m.matrix_[1][1] - m.matrix_[0][1] * m.matrix_[1][0];
+
+    S21Matrix little(m.rows_ - 1);
+    double sum = 0.0;
+    for (int column = 0; column < m.columns_; ++column) {
+        getLittleMatrix(m, little, 0, column);
+        sum += m.matrix_[0][column] * sign(0, column) * determinantRecursive(little);
+    }
+    return sum;
+}
+
+void S21Matrix::getLittleMatrix(const S21Matrix& big, S21Matrix& little, int rowToExclude, int columnToExclude) noexcept {
+    assert(rowToExclude < big.rows_ && columnToExclude < big.columns_ && "Rows or/and columns are invalid!");
+    
+    int rowLittle = 0;
+    for (int rowBig = 0; rowBig < big.rows_; ++rowBig) {
+        if (rowBig == rowToExclude)
+            continue;
+
+        int columnLittle = 0;
+        for (int columnBig = 0; columnBig < big.columns_; ++columnBig) {
+            if (columnBig == columnToExclude)
+                continue;
+            
+            little(rowLittle, columnLittle) = big(rowBig, columnBig);
+            ++columnLittle;
+        }        
+        ++rowLittle;
+    }
+}
+
+double S21Matrix::sign(int row, int column) noexcept {
+    return ((row + column) % 2) ? -1.0 : 1.0;
 }
