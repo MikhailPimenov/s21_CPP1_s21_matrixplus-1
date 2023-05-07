@@ -32,6 +32,8 @@ tests/tests_multiply_subscript.o: tests/tests_multiply_subscript.cpp s21_matrix_
 		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
 tests/tests_equal.o: tests/tests_equal.cpp s21_matrix_oop.h
 		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
+tests/tests_transpose.o: tests/tests_transpose.cpp s21_matrix_oop.h
+		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
 
 tests/tests_main.o: tests/tests_main.cpp s21_matrix_oop.h
 		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
@@ -47,7 +49,7 @@ gcov_report: test
 # open $(REPORT_DIRECTORY)/coverage_report.functions.html
 
 
-tests/tests_main.exe: s21_matrix_oop.o tests/tests_main.o tests/tests_sum_subscript.o tests/tests_subtract_subscript.o tests/tests_multiply_subscript.o tests/tests_equal.o
+tests/tests_main.exe: s21_matrix_oop.o tests/tests_main.o tests/tests_sum_subscript.o tests/tests_subtract_subscript.o tests/tests_multiply_subscript.o tests/tests_equal.o tests/tests_transpose.o
 		$(CC) -o $@ $^ $(GTEST_LFLAGS) $(GCOVR_LFLAGS)
 		
 

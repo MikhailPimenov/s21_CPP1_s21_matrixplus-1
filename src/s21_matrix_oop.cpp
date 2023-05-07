@@ -196,6 +196,16 @@ void S21Matrix::MulMatrix(const S21Matrix& other) {
     *this = std::move(result);
 }
 
+S21Matrix S21Matrix::Transpose() const noexcept {
+    S21Matrix result(columns_, rows_);
+    for (int row = 0; row < rows_; ++row)
+        for (int column = 0; column < columns_; ++column)
+            result.matrix_[column][row] = matrix_[row][column];
+    return result;
+}
+        
+
+
 
 
 bool operator==(const S21Matrix& left, const S21Matrix& right) noexcept {

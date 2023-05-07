@@ -47,12 +47,11 @@ class S21Matrix final {
         void SumMatrix(const S21Matrix& other);
         void SubMatrix(const S21Matrix& other);
         void MulNumber(const double number) noexcept;
-        //// TODO: test
         void MulMatrix(const S21Matrix& other);
+        //// TODO: test
+        S21Matrix Transpose() const noexcept;
         // TODO:
-        S21Matrix Transpose() noexcept;
-        // TODO:
-        S21Matrix CalcComplements();
+        S21Matrix CalcComplements() const;
         // TODO:
         double Determinant() const;
         // TODO:
@@ -71,7 +70,6 @@ class S21Matrix final {
         S21Matrix& operator+=(const S21Matrix& other);
         S21Matrix& operator-=(const S21Matrix& other);
         S21Matrix& operator*=(const double number) noexcept;
-        // TODO:
         S21Matrix& operator*=(const S21Matrix& other);
         
         // TODO:
