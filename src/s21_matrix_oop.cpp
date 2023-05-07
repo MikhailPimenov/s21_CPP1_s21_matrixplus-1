@@ -238,6 +238,24 @@ double S21Matrix::Determinant() const {
 }
           
 
+S21Matrix S21Matrix::InverseMatrix() const {
+    if (rows_ != columns_)
+        throw std::range_error("Matrix is not square to calculate inverse matrix!");
+
+    const double determinant = Determinant();
+
+    if (are_equal(determinant, 0.0, 1e-12))
+        throw std::invalid_argument("Determinant is zero, it is impossible to calculate inverse matrix!");
+
+    S21Matrix result = CalcComplements();
+    result = result.Transpose();
+
+    result *= (1.0 / determinant);
+    return result;
+}
+
+
+
 
 
 
