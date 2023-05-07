@@ -49,9 +49,7 @@ class S21Matrix final {
         void MulNumber(const double number) noexcept;
         void MulMatrix(const S21Matrix& other);
         S21Matrix Transpose() const noexcept;
-        // TODO:
         S21Matrix CalcComplements() const;
-        // TODO:
         double Determinant() const;
         // TODO:
         S21Matrix InverseMatrix() const;

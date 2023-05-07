@@ -204,9 +204,21 @@ S21Matrix S21Matrix::Transpose() const noexcept {
     return result;
 }
 
-// S21Matrix S21Matrix::CalcComplements() const {
-    // return 
-// }
+S21Matrix S21Matrix::CalcComplements() const {
+    if (rows_ != columns_)
+        throw std::range_error("Matrix is not square to calculate algebraic complements!");
+
+    S21Matrix result(rows_);
+    S21Matrix little(rows_ - 1);
+    for (int row = 0; row < rows_; ++row) {
+        for (int column = 0; column < columns_; ++column) {
+            getLittleMatrix(*this, little, row, column);
+            result(row, column) = sign(row, column) * little.Determinant();
+        }
+    }
+    
+    return result;
+}
 
 
 
