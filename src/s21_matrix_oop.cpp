@@ -1,6 +1,7 @@
 #include "s21_matrix_oop.h"
 #include <iostream>
 #include <exception>
+#include <cassert>
 
 bool are_equal(double a, double b, double epsilon = 1e-6) {
     return (a > b) ? (a - b < epsilon) : (b - a < epsilon);
@@ -57,16 +58,13 @@ S21Matrix::~S21Matrix() {
 // TODO: think of how to unite with copying operator= to avoid code duplication
 S21Matrix::S21Matrix(const S21Matrix& other) {
     allocate(other.rows_, other.columns_);
-
-    for (int row = 0; row < rows_; ++row)
-        for (int column = 0; column < columns_; ++column)
-            matrix_[row][column] = other.matrix_[row][column];            
+    copyFromTo(other, *this);
 }
 
 S21Matrix::S21Matrix(S21Matrix&& other) {
-    allocate(other.rows_, other.columns_);
-
     matrix_ = other.matrix_;
+    rows_ = other.rows_;
+    columns_ = other.columns_;
     
     other.matrix_ = nullptr;
     other.rows_ = 0;
@@ -78,15 +76,27 @@ S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
     if (&other == this)
         return *this;
     
-    allocate(other.rows_, other.columns_);
+    // Copy-swap idiom
+    // https://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
 
-    for (int row = 0; row < rows_; ++row)
-        for (int column = 0; column < columns_; ++column)
-            matrix_[row][column] = other.matrix_[row][column];            
+    S21Matrix temporary(other.rows_, other.columns_);
+    copyFromTo(other, temporary);
+
+    deallocate();
+    *this = std::move(temporary);            
 
     return *this;
 }
 
+// TODO: use copy-swap idiom!
+S21Matrix& S21Matrix::operator=(S21Matrix&& other) noexcept {
+    if (&other == this)
+        return *this;
+    
+    allocate(other.rows_, other.columns_);
+    copyFromTo(other, *this);
+    return *this;
+}
 
 void S21Matrix::allocate(int rows, int columns) {
     matrix_ = reinterpret_cast<double**>(new char[rows * sizeof(double*) + rows * columns * sizeof(double)]);
@@ -153,7 +163,6 @@ bool S21Matrix::EqMatrix(const S21Matrix& other) const noexcept {
 }
 
 
-// TODO: exception
 void S21Matrix::SumMatrix(const S21Matrix& other) {
     if (rows_ != other.rows_ || columns_ != other.columns_)
         throw std::range_error("Invalid rows or/and columns!");;
@@ -163,7 +172,6 @@ void S21Matrix::SumMatrix(const S21Matrix& other) {
             matrix_[row][column] += other.matrix_[row][column];
 }
 
-// TODO: exception
 void S21Matrix::SubMatrix(const S21Matrix& other) {
     if (rows_ != other.rows_ || columns_ != other.columns_)
         throw std::range_error("Invalid rows or/and columns!");
@@ -179,7 +187,14 @@ void S21Matrix::MulNumber(const double number) noexcept {
             matrix_[row][column] *= number;
 } 
 
+void S21Matrix::MulMatrix(const S21Matrix& other) {
+    if (columns_ != other.rows_)
+        throw std::range_error("Invalid rows or/and columns!");;
 
+    S21Matrix result(rows_, other.columns_);
+    multiply(*this, other, result);
+    *this = std::move(result);
+}
 
 
 
@@ -202,6 +217,10 @@ S21Matrix& S21Matrix::operator*=(const double number) noexcept {
     return *this;
 }
         
+S21Matrix& S21Matrix::operator*=(const S21Matrix& other) {
+    MulMatrix(other);
+    return *this;
+}
 
 
 
@@ -209,7 +228,6 @@ S21Matrix& S21Matrix::operator*=(const double number) noexcept {
 
 
 
-// TODO: exception
 double& S21Matrix::operator()(int row, int column) {
     if (row >= rows_ || column >= columns_)
         throw std::out_of_range("Rows or/and columns out of range!");
@@ -236,4 +254,34 @@ void S21Matrix::Print(const char* space, const char* endline) const noexcept {
         }
         std::cout << endline;
     }
+}
+
+void S21Matrix::multiply(const S21Matrix& left, const S21Matrix& right, S21Matrix& result) noexcept {
+    const int sum_length = left.columns_;
+    const int rows = left.rows_;
+    const int columns = right.columns_;
+
+    for (int row = 0; row < rows; ++row) {
+        for (int column = 0; column < columns; ++column) {
+            double sum = 0.0;
+            for (int s = 0; s < sum_length; ++s) {
+                sum += left.matrix_[row][s] * right.matrix_[s][column];
+            }
+            result.matrix_[row][column] = sum;
+        }
+    }
+}
+
+void S21Matrix::copyFromTo(const S21Matrix& source, S21Matrix& destination) noexcept {
+    assert(source.rows_ == destination.rows_ && "Rows are not equal!");
+    assert(source.columns_ == destination.columns_ && "Columns are not equal!");
+
+    if (source.rows_ && source.columns_) {
+        assert(source.matrix_ && "Matrix is null!");
+        assert(destination.matrix_ && "Matrix is null!");
+    }
+
+    for (int row = 0; row < source.rows_; ++row) 
+        for (int column = 0; column < source.columns_; ++column)
+            destination.matrix_[row][column] = source.matrix_[row][column];
 }

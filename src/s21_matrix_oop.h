@@ -44,13 +44,10 @@ class S21Matrix final {
 
         // core methods
         bool EqMatrix(const S21Matrix& other) const noexcept;
-        //// TODO: test
         void SumMatrix(const S21Matrix& other);
-        //// TODO: test
         void SubMatrix(const S21Matrix& other);
-        //// TODO: test
         void MulNumber(const double number) noexcept;
-        // TODO:
+        //// TODO: test
         void MulMatrix(const S21Matrix& other);
         // TODO:
         S21Matrix Transpose() noexcept;
@@ -71,11 +68,8 @@ class S21Matrix final {
         friend S21Matrix operator*(const S21Matrix& left, const S21Matrix& right);
         friend bool operator==(const S21Matrix& left, const S21Matrix& right) noexcept;  // don't have to be friend
 
-        // TODO:
         S21Matrix& operator+=(const S21Matrix& other);
-        // TODO:
         S21Matrix& operator-=(const S21Matrix& other);
-        // TODO:
         S21Matrix& operator*=(const double number) noexcept;
         // TODO:
         S21Matrix& operator*=(const S21Matrix& other);
@@ -95,6 +89,8 @@ class S21Matrix final {
     private:
         void allocate(int rows, int columns);
         void deallocate() noexcept;
+        static void multiply(const S21Matrix& left, const S21Matrix& right, S21Matrix& result) noexcept;
+        static void copyFromTo(const S21Matrix& source, S21Matrix& destination) noexcept;
 };
 
 #endif  //  __S21_MATRIX_OOP_H_
