@@ -47,7 +47,6 @@ S21Matrix::S21Matrix(S21Matrix&& other) {
     other.columns_ = 0;
 }
 
-// TODO: think of how to unite with copy constructor to avoid code duplication
 S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
     if (&other == this)
         return *this;
@@ -55,7 +54,13 @@ S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
     // Copy-swap idiom
     // https://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
     S21Matrix temporary(other);
-    *this = std::move(temporary);            
+
+    // move assignment operator is called, same as operator=(temporary)
+    // do not actually have to call operator=(std::move(temporary)) or *this = std::move(temporary)
+    // because temporary is about to be destroyed and compiler knows it and calls operator=(S21Matrix&&).
+    // But it is still up to the compiler which operator to call: operator=(S21Matrix&&) or operator=(const S21Matrix&),
+    // so to be sure operator=(S21Matrix&&) will be called casting temporary to r-value reference using std::move
+    *this = std::move(temporary);  
 
     return *this;
 }
@@ -132,9 +137,10 @@ void S21Matrix::SetRows(int rows) {
 
     // move assignment operator is called, same as operator=(temporary)
     // do not actually have to call operator=(std::move(temporary)) or *this = std::move(temporary)
-    // because temporary is about to be destroyed
-    *this = temporary;  
-
+    // because temporary is about to be destroyed and compiler knows it and calls operator=(S21Matrix&&).
+    // But it is still up to the compiler which operator to call: operator=(S21Matrix&&) or operator=(const S21Matrix&),
+    // so to be sure operator=(S21Matrix&&) will be called casting temporary to r-value reference using std::move
+    *this = std::move(temporary);  
 }
 
 void S21Matrix::SetColumns(int columns) {
@@ -164,8 +170,10 @@ void S21Matrix::SetColumns(int columns) {
     
     // move assignment operator is called, same as operator=(temporary)
     // do not actually have to call operator=(std::move(temporary)) or *this = std::move(temporary)
-    // because temporary is about to be destroyed
-    *this = temporary;  
+    // because temporary is about to be destroyed and compiler knows it and calls operator=(S21Matrix&&).
+    // But it is still up to the compiler which operator to call: operator=(S21Matrix&&) or operator=(const S21Matrix&),
+    // so to be sure operator=(S21Matrix&&) will be called casting temporary to r-value reference using std::move
+    *this = std::move(temporary);  
 }
 
 
