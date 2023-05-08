@@ -189,7 +189,7 @@ void S21Matrix::MulNumber(const double number) noexcept {
 
 void S21Matrix::MulMatrix(const S21Matrix& other) {
     if (columns_ != other.rows_)
-        throw std::range_error("Invalid rows or/and columns!");;
+        throw std::range_error("Invalid rows or/and columns!");
 
     S21Matrix result(rows_, other.columns_);
     multiply(*this, other, result);
