@@ -3,7 +3,7 @@
 #include <exception>
 #include <cassert>
 
-bool are_equal(double a, double b, double epsilon = 1e-6) {
+static bool are_equal(double a, double b, double epsilon = 1e-6) {
     return (a > b) ? (a - b < epsilon) : (b - a < epsilon);
 } 
 
@@ -306,16 +306,15 @@ S21Matrix& S21Matrix::operator*=(const S21Matrix& other) {
 
 
 
-double& S21Matrix::operator()(int row, int column) {
-    if (row >= rows_ || column >= columns_)
-        throw std::out_of_range("Rows or/and columns out of range!");
 
+
+double& S21Matrix::operator()(int row, int column) {
+    checkAndCorrectIndices(row, column);
     return matrix_[row][column];
 }
-double S21Matrix::operator()(int row, int column) const {
-    if (row >= rows_ || column >= columns_)
-        throw std::out_of_range("Rows or/and columns out of range!");
 
+double S21Matrix::operator()(int row, int column) const {
+    checkAndCorrectIndices(row, column);
     return matrix_[row][column];
 }
 
@@ -407,4 +406,16 @@ void S21Matrix::getLittleMatrix(const S21Matrix& big, S21Matrix& little, int row
 
 double S21Matrix::sign(int row, int column) noexcept {
     return ((row + column) % 2) ? -1.0 : 1.0;
+}
+
+void S21Matrix::checkAndCorrectIndices(int& row, int& column) const {
+    // if (row >= rows_ || row < -rows_ || column >= columns_ || column < -columns_)
+    if (row < -rows_ || rows_ <= row || column < -columns_ || columns_ <= column)
+        throw std::out_of_range("Rows or/and columns out of range!");
+
+    // Python-style indices: when '-1' means 'length - 1', '-2' means 'length - 2' and so on
+    if (-rows_ <= row && row < 0)
+        row += rows_;
+    if (-columns_ <= column && column < 0)
+        column += columns_;
 }

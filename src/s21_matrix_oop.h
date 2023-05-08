@@ -51,16 +51,12 @@ class S21Matrix final {
         S21Matrix Transpose() const noexcept;
         S21Matrix CalcComplements() const;
         double Determinant() const;
-        // TODO:
         S21Matrix InverseMatrix() const;
 
 
 
-        //// TODO: test
         friend S21Matrix operator+(const S21Matrix& left, const S21Matrix& right);
-        //// TODO: test
         friend S21Matrix operator-(const S21Matrix& left, const S21Matrix& right);
-        //// TODO: test
         friend S21Matrix operator*(const S21Matrix& left, const S21Matrix& right);
         friend bool operator==(const S21Matrix& left, const S21Matrix& right) noexcept;  // don't have to be friend
 
@@ -69,17 +65,12 @@ class S21Matrix final {
         S21Matrix& operator*=(const double number) noexcept;
         S21Matrix& operator*=(const S21Matrix& other);
         
-        // TODO:
         double& operator()(int row, int column);
-        // TODO:
         double operator()(int row, int column) const;
 
 
-
-
         void Fill(double element = 0.0) noexcept;
-        void Print(const char* space = " ", const char* endline = "\n") const noexcept;
-
+        void Print(const char* space = "\t", const char* endline = "\n") const noexcept;
 
     private:
         void allocate(int rows, int columns);
@@ -89,6 +80,8 @@ class S21Matrix final {
         static double determinantRecursive(const S21Matrix& m);
         static void getLittleMatrix(const S21Matrix& big, S21Matrix& little, int rowToExclude, int columnToExclude) noexcept;
         static double sign(int row, int column) noexcept;
+        void checkAndCorrectIndices(int& row, int& column) const;
+
 };
 
 #endif  //  __S21_MATRIX_OOP_H_
