@@ -254,7 +254,24 @@ S21Matrix S21Matrix::InverseMatrix() const {
     return result;
 }
 
+S21Matrix operator+(const S21Matrix& left, const S21Matrix& right) {
+    S21Matrix result(left);
+    result.SumMatrix(right);
+    return result;    
+}
 
+S21Matrix operator-(const S21Matrix& left, const S21Matrix& right) {
+    S21Matrix result(left);
+    result.SubMatrix(right);
+    return result;    
+}
+
+S21Matrix operator*(const S21Matrix& left, const S21Matrix& right) {
+    S21Matrix result(left);
+    result.MulMatrix(right);
+    return result;    
+}
+        
 
 
 

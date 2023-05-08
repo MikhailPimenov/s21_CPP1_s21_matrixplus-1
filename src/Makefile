@@ -24,7 +24,12 @@ all: build
 s21_matrix_oop.a: s21_matrix_oop.oa 
 		ar rcs $@ $^
 
-
+tests/tests_multiply.o: tests/tests_multiply.cpp s21_matrix_oop.h
+		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
+tests/tests_subtract.o: tests/tests_subtract.cpp s21_matrix_oop.h
+		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
+tests/tests_sum.o: tests/tests_sum.cpp s21_matrix_oop.h
+		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
 tests/tests_inverse.o: tests/tests_inverse.cpp s21_matrix_oop.h
 		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
 tests/tests_calc_complements.o: tests/tests_calc_complements.cpp s21_matrix_oop.h
@@ -56,7 +61,7 @@ gcov_report: test
 # open $(REPORT_DIRECTORY)/coverage_report.functions.html
 
 
-tests/tests_main.exe: s21_matrix_oop.o tests/tests_main.o tests/tests_sum_subscript.o tests/tests_subtract_subscript.o tests/tests_multiply_subscript.o tests/tests_equal.o tests/tests_transpose.o tests/tests_determinant.o tests/tests_calc_complements.o tests/tests_inverse.o
+tests/tests_main.exe: s21_matrix_oop.o tests/tests_main.o tests/tests_sum_subscript.o tests/tests_subtract_subscript.o tests/tests_multiply_subscript.o tests/tests_equal.o tests/tests_transpose.o tests/tests_determinant.o tests/tests_calc_complements.o tests/tests_inverse.o tests/tests_sum.o tests/tests_subtract.o tests/tests_multiply.o
 		$(CC) -o $@ $^ $(GTEST_LFLAGS) $(GCOVR_LFLAGS)
 		
 

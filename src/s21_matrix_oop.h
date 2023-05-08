@@ -56,11 +56,11 @@ class S21Matrix final {
 
 
 
-        // TODO:
+        //// TODO: test
         friend S21Matrix operator+(const S21Matrix& left, const S21Matrix& right);
-        // TODO:
+        //// TODO: test
         friend S21Matrix operator-(const S21Matrix& left, const S21Matrix& right);
-        // TODO:
+        //// TODO: test
         friend S21Matrix operator*(const S21Matrix& left, const S21Matrix& right);
         friend bool operator==(const S21Matrix& left, const S21Matrix& right) noexcept;  // don't have to be friend
 
