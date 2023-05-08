@@ -22,40 +22,16 @@ S21Matrix::S21Matrix(int dimension) : S21Matrix(dimension, dimension) {
 
 }
 
-S21Matrix::S21Matrix(const std::initializer_list<std::initializer_list<double>>& list) {
-    const std::size_t rows = list.size();
-    if (rows == 0u)
-        throw std::range_error("Invalid rows in initializer list!");
-
-    const std::size_t columns = list.begin()->size();
-    if (columns == 0u)
-        throw std::range_error("Invalid columns in initializer list!");
-        
-    for (const auto& line : list)
-        if (line.size() != columns)
-            throw std::range_error("Invvalid columns in initializer list! Matrix is not rectangular!");
-
-
-    allocate(rows, columns);
-
-    std::size_t row = 0u;
-    for (const auto& line : list) {
-        std::size_t column = 0u;
-        for (double element : line) {
-            matrix_[row][column] = element;
-            ++column;
-        }
-        ++row;
-    }
+S21Matrix::S21Matrix(const List& list) {
+    checkIfListIsRectangular(list);
+    allocate(list.size(), list.begin()->size());
+    copyFromTo(list, *this);
 }
-
 
 S21Matrix::~S21Matrix() {
     deallocate();
 }
 
-
-// TODO: think of how to unite with copying operator= to avoid code duplication
 S21Matrix::S21Matrix(const S21Matrix& other) {
     allocate(other.rows_, other.columns_);
     copyFromTo(other, *this);
@@ -78,23 +54,38 @@ S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
     
     // Copy-swap idiom
     // https://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
-
-    S21Matrix temporary(other.rows_, other.columns_);
-    copyFromTo(other, temporary);
-
-    deallocate();
+    S21Matrix temporary(other);
     *this = std::move(temporary);            
 
     return *this;
 }
 
-// TODO: use copy-swap idiom!
 S21Matrix& S21Matrix::operator=(S21Matrix&& other) noexcept {
     if (&other == this)
         return *this;
     
-    allocate(other.rows_, other.columns_);
-    copyFromTo(other, *this);
+    deallocate();
+
+    matrix_ = other.matrix_;
+    rows_ = other.rows_;
+    columns_ = other.columns_;
+    
+    other.matrix_ = nullptr;
+    other.rows_ = 0;
+    other.columns_ = 0;
+
+    return *this;
+}
+
+S21Matrix& S21Matrix::operator=(const List& list) {
+    checkIfListIsRectangular(list);
+
+    if (list.size() != static_cast<long long unsigned>(rows_) || list.begin()->size() != static_cast<long long unsigned>(columns_)) {
+        deallocate();
+        allocate(list.size(), list.begin()->size());
+    }
+
+    copyFromTo(list, *this);
     return *this;
 }
 
@@ -257,15 +248,6 @@ S21Matrix S21Matrix::CalcComplements() const {
     
     return result;
 }
-
-
-
-
-
-
-
-
-
         
 double S21Matrix::Determinant() const {
     if (rows_ != columns_)
@@ -275,7 +257,6 @@ double S21Matrix::Determinant() const {
     return determinantRecursive(*this);
 }
           
-
 S21Matrix S21Matrix::InverseMatrix() const {
     if (rows_ != columns_)
         throw std::range_error("Matrix is not square to calculate inverse matrix!");
@@ -309,10 +290,6 @@ S21Matrix operator*(const S21Matrix& left, const S21Matrix& right) {
     result.MulMatrix(right);
     return result;    
 }
-        
-
-
-
 
 bool operator==(const S21Matrix& left, const S21Matrix& right) noexcept {
     return left.EqMatrix(right);
@@ -338,14 +315,6 @@ S21Matrix& S21Matrix::operator*=(const S21Matrix& other) {
     return *this;
 }
 
-
-
-
-
-
-
-
-
 double& S21Matrix::operator()(int row, int column) {
     checkAndCorrectIndices(row, column);
     return matrix_[row][column];
@@ -355,10 +324,6 @@ double S21Matrix::operator()(int row, int column) const {
     checkAndCorrectIndices(row, column);
     return matrix_[row][column];
 }
-
-
-
-
 
 void S21Matrix::Fill(double element) noexcept {
     for (int row = 0; row < rows_; ++row)
@@ -405,6 +370,21 @@ void S21Matrix::copyFromTo(const S21Matrix& source, S21Matrix& destination) noex
             destination.matrix_[row][column] = source.matrix_[row][column];
 }
 
+void S21Matrix::copyFromTo(const List& source, S21Matrix& destination) noexcept {
+    assert(source.size() == static_cast<long long unsigned>(destination.rows_) && "Rows are not equal!");
+    assert(source.begin()->size() == static_cast<long long unsigned>(destination.columns_) && "Columns are not equal!");
+
+    std::size_t row = 0u;
+    for (const auto& line : source) {
+        std::size_t column = 0u;
+        for (double element : line) {
+            destination.matrix_[row][column] = element;
+            ++column;
+        }
+        ++row;
+    }
+}
+
 double S21Matrix::determinantRecursive(const S21Matrix& m) {
     assert(m.rows_ == m.columns_ && "Matrix is not square, it is impossible to calculate determinant!");
     if (m.rows_ <= 1)
@@ -447,7 +427,6 @@ double S21Matrix::sign(int row, int column) noexcept {
 }
 
 void S21Matrix::checkAndCorrectIndices(int& row, int& column) const {
-    // if (row >= rows_ || row < -rows_ || column >= columns_ || column < -columns_)
     if (row < -rows_ || rows_ <= row || column < -columns_ || columns_ <= column)
         throw std::out_of_range("Rows or/and columns out of range!");
 
@@ -456,4 +435,19 @@ void S21Matrix::checkAndCorrectIndices(int& row, int& column) const {
         row += rows_;
     if (-columns_ <= column && column < 0)
         column += columns_;
+}
+ 
+void S21Matrix::checkIfListIsRectangular(const List& list)
+{
+    const std::size_t rows = list.size();
+    if (rows == 0u)
+        throw std::range_error("Invalid rows in initializer list!");
+
+    const std::size_t columns = list.begin()->size();
+    if (columns == 0u)
+        throw std::range_error("Invalid columns in initializer list!");
+        
+    for (const auto& line : list)
+        if (line.size() != columns)
+            throw std::range_error("Invvalid columns in initializer list! Matrix is not rectangular!");
 }

@@ -3,7 +3,9 @@
 
 #include <initializer_list>
 
-class S21Matrix final {
+class S21Matrix {
+    using List = std::initializer_list<std::initializer_list<double>>;
+
     private:
         // Attributes
         int rows_ = 0;
@@ -12,23 +14,21 @@ class S21Matrix final {
 
     public:
 
-
         S21Matrix() noexcept;               // Default constructor
         S21Matrix(int rows, int columns);
         explicit S21Matrix(int dimension);  // Constructor for square matrix
-        S21Matrix(const std::initializer_list<std::initializer_list<double>>& list);
+        explicit S21Matrix(const List& list);
 
         // rule of five
         ~S21Matrix();                       // Destructor
-        //// TODO: test?
+        // TODO: copy-swap idiom
         S21Matrix(const S21Matrix& other);
-        //// TODO: test?
         S21Matrix(S21Matrix&& other);
-        //// TODO: test?
         S21Matrix& operator=(const S21Matrix& other);
-        //// TODO: test?
         S21Matrix& operator=(S21Matrix&& other) noexcept;
         
+
+        S21Matrix& operator=(const List& list);
 
 
         // getters and setters
@@ -69,15 +69,24 @@ class S21Matrix final {
         void Print(const char* space = "\t", const char* endline = "\n") const noexcept;
 
     private:
+
+        // create/destroy
         void allocate(int rows, int columns);
         void deallocate() noexcept;
-        static void multiply(const S21Matrix& left, const S21Matrix& right, S21Matrix& result) noexcept;
         static void copyFromTo(const S21Matrix& source, S21Matrix& destination) noexcept;
+        static void copyFromTo(const List& list, S21Matrix& destination) noexcept;
+        
+        static void multiply(const S21Matrix& left, const S21Matrix& right, S21Matrix& result) noexcept;
+        
+        // determinant
         static double determinantRecursive(const S21Matrix& m);
         static void getLittleMatrix(const S21Matrix& big, S21Matrix& little, int rowToExclude, int columnToExclude) noexcept;
         static double sign(int row, int column) noexcept;
+        
+        // indices
         void checkAndCorrectIndices(int& row, int& column) const;
 
+        static void checkIfListIsRectangular(const List& list);
 };
 
 #endif  //  __S21_MATRIX_OOP_H_
