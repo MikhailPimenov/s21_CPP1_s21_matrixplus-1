@@ -115,29 +115,67 @@ void S21Matrix::deallocate() noexcept {
     columns_ = 0;
 }
 
-// void S21Matrix::SetRows(int rows) {
-//     if (rows == rows_)
-//         return;
+void S21Matrix::SetRows(int rows) {
+    if (rows == rows_)
+        return;
 
-//     if (rows < 0)
-//         throw std::range_error("Invalid rows!");;
+    if (rows <= 0)
+        throw std::range_error("Invalid rows!");;
 
     
-//     S21Matrix temporary(rows, columns_);
+    S21Matrix temporary(rows, columns_);
 
-//     const int minRow = rows < rows_ ? rows : rows_;
+    const int minRow = rows < rows_ ? rows : rows_;
 
-//     for (int row = 0; row < minRow; ++row) {
-//         for (int column = 0; column < columns_; ++column) {
-//             temporary(row, column) = operator()(row, column);
-//         }
-//     }
+    for (int row = 0; row < minRow; ++row) {
+        for (int column = 0; column < columns_; ++column) {
+            temporary(row, column) = matrix_[row][column];
+        }
+    }
 
-//     operator=(std::move(temporary));
-// }
+    for (int row = minRow; row < temporary.rows_; ++row) {
+        for (int column = 0; column < columns_; ++column) {
+            temporary(row, column) = 0.0;
+        }
+    }
 
-// void S21Matrix::SetColumns(int rows) {
-// }
+    // move assignment operator is called, same as operator=(temporary)
+    // do not actually have to call operator=(std::move(temporary)) or *this = std::move(temporary)
+    // because temporary is about to be destroyed
+    *this = temporary;  
+
+}
+
+void S21Matrix::SetColumns(int columns) {
+    if (columns == columns_)
+        return;
+
+    if (columns <= 0)
+        throw std::range_error("Invalid columns!");;
+
+    
+    S21Matrix temporary(rows_, columns);
+
+    const int minColumns = columns < columns_ ? columns : columns_;
+
+    for (int row = 0; row < rows_; ++row) {
+        for (int column = 0; column < minColumns; ++column) {
+            temporary(row, column) = matrix_[row][column];
+        }
+    }
+
+    for (int row = 0; row < rows_; ++row) {
+        for (int column = minColumns; column < temporary.columns_; ++column) {
+            temporary(row, column) = 0.0;
+        }
+    }
+
+    
+    // move assignment operator is called, same as operator=(temporary)
+    // do not actually have to call operator=(std::move(temporary)) or *this = std::move(temporary)
+    // because temporary is about to be destroyed
+    *this = temporary;  
+}
 
 
 

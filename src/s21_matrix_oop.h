@@ -32,13 +32,9 @@ class S21Matrix final {
 
 
         // getters and setters
-        // TODO:
-        // void SetRows(int rows);
-        // TODO:
+        void SetRows(int rows);
         int GetRows() const noexcept;
-        // TODO:
-        // void SetColumns(int columns);
-        // TODO:
+        void SetColumns(int columns);
         int GetColumns() const noexcept;
 
 
