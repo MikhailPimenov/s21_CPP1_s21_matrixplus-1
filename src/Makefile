@@ -15,7 +15,7 @@ GCOVR_LFLAGS=-lgcov
 GTEST_LFLAGS=-lgtest -lgtest_main
 
 REPORT_DIRECTORY=report
-
+VALGRIND_REPORT_DIRECTORY=valgrind_report
 
 all: build
 
@@ -84,6 +84,9 @@ s21_matrix_oop.oa: s21_matrix_oop.cpp s21_matrix_oop.h
 # s21_create_matrix.oa: s21_create_matrix.c s21_matrix.h
 # 		$(CC) -c $(STRICT_CFLAGS) $< -o $@
 
+valgrind: tests/tests_main.exe
+		mkdir -p $(VALGRIND_REPORT_DIRECTORY)
+		-valgrind --leak-check=full --show-reachable=no --track-origins=yes -s ./tests/tests_main.exe > $(VALGRIND_REPORT_DIRECTORY)/valgrind_report.txt
 
 clean:
 		rm -rf *.o *.exe *.out *.oa
