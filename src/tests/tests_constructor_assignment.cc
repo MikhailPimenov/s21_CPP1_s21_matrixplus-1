@@ -67,6 +67,14 @@ namespace {
         EXPECT_DOUBLE_EQ(m1(1, 2), 0.6);
     }
 
+    TEST(ConstructorTests, Test4Initializer2WrongSize) {
+        EXPECT_THROW(const S21Matrix m1({
+            {0.1, 0.2, 0.3},
+            {0.4, 0.5},
+        }),
+        std::range_error);
+    }
+
     TEST(ConstructorTests, Test5CopyConstructor) {
         const S21Matrix m1({
             {0.1, 0.2, 0.3},
@@ -77,7 +85,7 @@ namespace {
         EXPECT_TRUE(m1 == m2);
     }
 
-     TEST(ConstructorTests, Test6CopyConstructor) {
+    TEST(ConstructorTests, Test6CopyConstructor) {
         const S21Matrix m1({
             {0.1, 0.2, 0.3},
             {0.4, 0.5, 0.6},
@@ -180,7 +188,7 @@ namespace {
     }
 
     TEST(AssignmentOperatorTests, Test12MoveAssignmentSelf) {
-        S21Matrix m1({
+        const S21Matrix m1({
             {0.1, 0.2, 0.3},
             {0.4, 0.5, 0.6},
         });
@@ -197,7 +205,7 @@ namespace {
     }
 
     TEST(AssignmentOperatorTests, Test13AssignmentInitializer) {
-        S21Matrix m1({
+        const S21Matrix m1({
             {0.1, 0.2, 0.3},
             {0.4, 0.5, 0.6},
         });
@@ -224,5 +232,151 @@ namespace {
         });
 
         EXPECT_TRUE(actual == expected);
+    }
+
+    TEST(AssignmentOperatorTests, Test14AssignmentInitializerWrongInitializerSize) {
+        const S21Matrix m1({
+            {0.1, 0.2, 0.3},
+            {0.4, 0.5, 0.6},
+        });
+
+        S21Matrix actual(m1);
+        EXPECT_THROW(
+            actual = std::initializer_list<std::initializer_list<double>>({
+                {0.1, 0.2, 0.3, 0.4, 0.5},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+            }),
+            std::range_error
+        );
+    }
+
+    TEST(AssignmentOperatorTests, Test15AssignmentInitializerWrongInitializerSize) {
+        const S21Matrix m1({
+            {0.1, 0.2, 0.3},
+            {0.4, 0.5, 0.6},
+        });
+
+        S21Matrix actual(m1);
+        EXPECT_THROW(
+            actual = std::initializer_list<std::initializer_list<double>>({
+                {},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+            }),
+            std::range_error
+        );
+    }
+
+    TEST(AssignmentOperatorTests, Test16AssignmentInitializerWrongInitializerSize) {
+        const S21Matrix m1({
+            {0.1, 0.2, 0.3},
+            {0.4, 0.5, 0.6},
+        });
+
+        S21Matrix actual(m1);
+        EXPECT_THROW(
+            actual = std::initializer_list<std::initializer_list<double>>({
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+            }),
+            std::range_error
+        );
+    }
+
+    TEST(AssignmentOperatorTests, Test17AssignmentInitializerWrongInitializerSize) {
+        const S21Matrix m1({
+            {0.1, 0.2, 0.3},
+            {0.4, 0.5, 0.6},
+        });
+
+        S21Matrix actual(m1);
+        EXPECT_THROW(
+            actual = std::initializer_list<std::initializer_list<double>>({
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+            }),
+            std::range_error
+        );
+    }
+
+    TEST(AssignmentOperatorTests, Test18AssignmentInitializerWrongInitializerSize) {
+        const S21Matrix m1({
+            {0.1, 0.2, 0.3},
+            {0.4, 0.5, 0.6},
+        });
+
+        S21Matrix actual(m1);
+        EXPECT_THROW(
+            actual = std::initializer_list<std::initializer_list<double>>({
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+                {0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
+            }),
+            std::range_error
+        );
+    }
+
+    TEST(AssignmentOperatorTests, Test19AssignmentInitializerWrongInitializerSize) {
+        const S21Matrix m1({
+            {0.1, 0.2, 0.3},
+            {0.4, 0.5, 0.6},
+        });
+
+        S21Matrix actual(m1);
+        EXPECT_THROW(
+            actual = std::initializer_list<std::initializer_list<double>>({}), 
+            std::range_error
+        );
+    }
+
+    TEST(AssignmentOperatorTests, Test20AssignmentInitializerWrongInitializerSize) {
+        const S21Matrix m1({
+            {0.1, 0.2, 0.3},
+            {0.4, 0.5, 0.6},
+        });
+
+        S21Matrix actual(m1);
+        EXPECT_THROW(
+            actual = std::initializer_list<std::initializer_list<double>>({{},}), 
+            std::range_error
+        );
+    }
+
+    TEST(AssignmentOperatorTests, Test21AssignmentInitializerWrongInitializerSize) {
+        const S21Matrix m1({
+            {0.1, 0.2, 0.3},
+            {0.4, 0.5, 0.6},
+        });
+
+        S21Matrix actual(m1);
+        EXPECT_THROW(
+            actual = std::initializer_list<std::initializer_list<double>>({{},{},}), 
+            std::range_error
+        );
     }
 }
