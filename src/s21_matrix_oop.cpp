@@ -38,48 +38,25 @@ S21Matrix::S21Matrix(const S21Matrix& other) {
 }
 
 S21Matrix::S21Matrix(S21Matrix&& other) {
-    matrix_ = other.matrix_;
-    rows_ = other.rows_;
-    columns_ = other.columns_;
-    
-    other.matrix_ = nullptr;
-    other.rows_ = 0;
-    other.columns_ = 0;
+    swap(*this, other);
 }
 
-S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
-    if (&other == this)
-        return *this;
-    
+S21Matrix& S21Matrix::operator=(S21Matrix other) {
     // Copy-swap idiom
     // https://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
-    S21Matrix temporary(other);
 
-    // move assignment operator is called, same as operator=(temporary)
-    // do not actually have to call operator=(std::move(temporary)) or *this = std::move(temporary)
-    // because temporary is about to be destroyed and compiler knows it and calls operator=(S21Matrix&&).
-    // But it is still up to the compiler which operator to call: operator=(S21Matrix&&) or operator=(const S21Matrix&),
-    // so to be sure operator=(S21Matrix&&) will be called casting temporary to r-value reference using std::move
-    *this = std::move(temporary);  
-
+    swap(*this, other);
     return *this;
 }
 
-S21Matrix& S21Matrix::operator=(S21Matrix&& other) noexcept {
-    if (&other == this)
-        return *this;
-    
-    deallocate();
+void swap(S21Matrix& first, S21Matrix& second) noexcept {
+    // enable ADL (not necessary in our case, but good practice)
+    using std::swap;
 
-    matrix_ = other.matrix_;
-    rows_ = other.rows_;
-    columns_ = other.columns_;
-    
-    other.matrix_ = nullptr;
-    other.rows_ = 0;
-    other.columns_ = 0;
 
-    return *this;
+    swap(first.rows_, second.rows_);
+    swap(first.columns_, second.columns_);
+    swap(first.matrix_, second.matrix_);
 }
 
 S21Matrix& S21Matrix::operator=(const List& list) {
@@ -123,7 +100,7 @@ void S21Matrix::SetRows(int rows) {
     // because temporary is about to be destroyed and compiler knows it and calls operator=(S21Matrix&&).
     // But it is still up to the compiler which operator to call: operator=(S21Matrix&&) or operator=(const S21Matrix&),
     // so to be sure operator=(S21Matrix&&) will be called casting temporary to r-value reference using std::move
-    *this = std::move(temporary);  
+    *this = temporary;  
 }
 
 int S21Matrix::GetRows() const noexcept {
@@ -160,7 +137,7 @@ void S21Matrix::SetColumns(int columns) {
     // because temporary is about to be destroyed and compiler knows it and calls operator=(S21Matrix&&).
     // But it is still up to the compiler which operator to call: operator=(S21Matrix&&) or operator=(const S21Matrix&),
     // so to be sure operator=(S21Matrix&&) will be called casting temporary to r-value reference using std::move
-    *this = std::move(temporary);  
+    *this = temporary;  
 }
 
 int S21Matrix::GetColumns() const noexcept {

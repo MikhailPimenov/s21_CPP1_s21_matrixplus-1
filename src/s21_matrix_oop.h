@@ -29,12 +29,11 @@ class S21Matrix {
 
         // rule of five
         ~S21Matrix();                       // Destructor
-        // TODO: implement copy-swap idiom
         S21Matrix(const S21Matrix& other);
         S21Matrix(S21Matrix&& other);
-        S21Matrix& operator=(const S21Matrix& other);
-        S21Matrix& operator=(S21Matrix&& other) noexcept;
-        
+        S21Matrix& operator=(S21Matrix other);
+        friend void swap(S21Matrix& first, S21Matrix& second) noexcept;
+
 
         /*
         To modify matrix like that:
@@ -82,6 +81,7 @@ class S21Matrix {
         double operator()(int row, int column) const;
 
 
+        // helpers
         void Fill(double element = 0.0) noexcept;
         void Print(const char* space = "\t", const char* endline = "\n") const noexcept;
 

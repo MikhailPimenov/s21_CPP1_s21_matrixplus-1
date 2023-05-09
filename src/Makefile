@@ -135,3 +135,4 @@ clean:
 		rm -rf tests/*.o tests/*.exe tests/*.out
 		rm -rf *.gcno *.gcda
 		rm -rf $(REPORT_DIRECTORY)/*.css $(REPORT_DIRECTORY)/*.html
+		rm -rf $(VALGRIND_REPORT_DIRECTORY_FOR_DOCKER_CONTAINER)/*.txt
