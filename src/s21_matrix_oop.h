@@ -4,7 +4,8 @@
 #include <initializer_list>
 
 class S21Matrix {
-    using List = std::initializer_list<std::initializer_list<double>>;
+    private:
+        using List = std::initializer_list<std::initializer_list<double>>;
 
     private:
         // Attributes
