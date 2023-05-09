@@ -16,6 +16,8 @@ all: s21_matrix_oop.a test gcov_report
 s21_matrix_oop.a: s21_matrix_oop.oa 
 		ar rcs $@ $^
 
+tests/tests_helpers.o: tests/tests_helpers.cc s21_matrix_oop.h
+		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
 tests/tests_constructor_assignment.o: tests/tests_constructor_assignment.cc s21_matrix_oop.h
 		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
 tests/tests_getset.o: tests/tests_getset.cc s21_matrix_oop.h
