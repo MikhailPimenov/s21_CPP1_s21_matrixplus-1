@@ -88,6 +88,51 @@ valgrind: tests/tests_main.exe
 		mkdir -p $(VALGRIND_REPORT_DIRECTORY)
 		-valgrind --leak-check=full --show-reachable=no --track-origins=yes -s ./tests/tests_main.exe > $(VALGRIND_REPORT_DIRECTORY)/valgrind_report.txt
 
+check_style:
+		clang-format --style=Google -n *.cpp
+		clang-format --style=Google -n *.h
+		clang-format --style=Google -n tests/*.cpp
+		clang-format --style=Google -n tests/*.h
+
+style: style_google
+
+style_google:
+		clang-format --style=Google -i *.cpp
+		clang-format --style=Google -i *.h
+		clang-format --style=Google -i tests/*.cpp
+		clang-format --style=Google -i tests/*.h
+
+style_microsoft:
+		clang-format --style=Microsoft -i *.cpp
+		clang-format --style=Microsoft -i *.h
+		clang-format --style=Microsoft -i tests/*.cpp
+		clang-format --style=Microsoft -i tests/*.h
+
+style_llvm:
+		clang-format --style=LLVM -i *.cpp
+		clang-format --style=LLVM -i *.h
+		clang-format --style=LLVM -i tests/*.cpp
+		clang-format --style=LLVM -i tests/*.h
+
+style_chromium:
+		clang-format --style=Chromium -i *.cpp
+		clang-format --style=Chromium -i *.h
+		clang-format --style=Chromium -i tests/*.cpp
+		clang-format --style=Chromium -i tests/*.h
+
+style_mozilla:
+		clang-format --style=Mozilla -i *.cpp
+		clang-format --style=Mozilla -i *.h
+		clang-format --style=Mozilla -i tests/*.cpp
+		clang-format --style=Mozilla -i tests/*.h
+
+style_WebKit:
+		clang-format --style=WebKit -i *.cpp
+		clang-format --style=WebKit -i *.h
+		clang-format --style=WebKit -i tests/*.cpp
+		clang-format --style=WebKit -i tests/*.h
+
+
 clean:
 		rm -rf *.o *.exe *.out *.oa
 		rm -rf tests/*.o tests/*.exe tests/*.out
