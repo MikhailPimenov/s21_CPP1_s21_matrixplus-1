@@ -72,6 +72,8 @@ class S21Matrix {
         friend S21Matrix operator+(const S21Matrix& left, const S21Matrix& right);
         friend S21Matrix operator-(const S21Matrix& left, const S21Matrix& right);
         friend S21Matrix operator*(const S21Matrix& left, const S21Matrix& right);
+        friend S21Matrix operator*(const S21Matrix& left, double right);
+        friend S21Matrix operator*(double left, const S21Matrix& right);
         friend bool operator==(const S21Matrix& left, const S21Matrix& right) noexcept;  // don't have to be friend
 
         S21Matrix& operator+=(const S21Matrix& other);
