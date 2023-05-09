@@ -15,7 +15,7 @@ GCOVR_LFLAGS=-lgcov
 GTEST_LFLAGS=-lgtest -lgtest_main
 
 REPORT_DIRECTORY=report
-VALGRIND_REPORT_DIRECTORY=valgrind_report
+VALGRIND_REPORT_DIRECTORY_FOR_DOCKER_CONTAINER=valgrind_report
 
 all: build
 
@@ -75,8 +75,16 @@ s21_matrix_oop.oa: s21_matrix_oop.cpp s21_matrix_oop.h
 		$(CC) -c $(STRICT_CFLAGS) $< -o $@
 
 valgrind: tests/tests_main.exe
-		mkdir -p $(VALGRIND_REPORT_DIRECTORY)
-		-valgrind --leak-check=full --show-reachable=no --track-origins=yes -s ./tests/tests_main.exe > $(VALGRIND_REPORT_DIRECTORY)/valgrind_report.txt
+		mkdir -p $(VALGRIND_REPORT_DIRECTORY_FOR_DOCKER_CONTAINER)
+		-valgrind --leak-check=full --show-reachable=no --track-origins=yes --log-file=$(VALGRIND_REPORT_DIRECTORY_FOR_DOCKER_CONTAINER)/valgrind_report.txt -s ./tests/tests_main.exe > $(VALGRIND_REPORT_DIRECTORY_FOR_DOCKER_CONTAINER)/test_report.txt
+		cat $(VALGRIND_REPORT_DIRECTORY_FOR_DOCKER_CONTAINER)/test_report.txt
+		cat $(VALGRIND_REPORT_DIRECTORY_FOR_DOCKER_CONTAINER)/valgrind_report.txt
+
+valgrind_full: tests/tests_main.exe
+		mkdir -p $(VALGRIND_REPORT_DIRECTORY_FOR_DOCKER_CONTAINER)
+		-valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=$(VALGRIND_REPORT_DIRECTORY_FOR_DOCKER_CONTAINER)/valgrind_full_report.txt -s ./tests/tests_main.exe > $(VALGRIND_REPORT_DIRECTORY_FOR_DOCKER_CONTAINER)/test_report.txt
+
+
 
 check_style:
 		clang-format --style=Google -n *.cpp
