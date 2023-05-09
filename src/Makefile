@@ -56,10 +56,8 @@ gcov_report: test
 		gcovr . --html --html-details --exclude-lines-by-pattern '.*assert.*' -o $(REPORT_DIRECTORY)/coverage_report.html
 		START "" $(REPORT_DIRECTORY)/coverage_report.functions.html  
 
-
-tests/tests_main.exe: s21_matrix_oop.o tests/tests_main.o tests/tests_sum_subscript.o tests/tests_subtract_subscript.o tests/tests_multiply_subscript.o tests/tests_equal.o tests/tests_transpose.o tests/tests_determinant.o tests/tests_calc_complements.o tests/tests_inverse.o tests/tests_sum.o tests/tests_subtract.o tests/tests_multiply.o tests/tests_brace.o tests/tests_getset.o tests/tests_constructor_assignment.o
+tests/tests_main.exe: s21_matrix_oop.o tests/tests_main.o tests/tests_sum_subscript.o tests/tests_subtract_subscript.o tests/tests_multiply_subscript.o tests/tests_equal.o tests/tests_transpose.o tests/tests_determinant.o tests/tests_calc_complements.o tests/tests_inverse.o tests/tests_sum.o tests/tests_subtract.o tests/tests_multiply.o tests/tests_brace.o tests/tests_getset.o tests/tests_constructor_assignment.o tests/tests_getset.o tests/tests_helpers.o
 		$(CC) -o $@ $^ $(GTEST_LFLAGS) $(GCOVR_LFLAGS)
-		
 
 s21_matrix_oop.o: s21_matrix_oop.cc s21_matrix_oop.h
 		$(CC) -c $(STRICT_CFLAGS) $< -o $@ $(GCOVR_CFLAGS)
@@ -80,9 +78,55 @@ valgrind_full: tests/tests_main.exe
 		cat $(VALGRIND_REPORT_DIRECTORY_FOR_DOCKER_CONTAINER)/test_report.txt
 		cat $(VALGRIND_REPORT_DIRECTORY_FOR_DOCKER_CONTAINER)/valgrind_full_report.txt
 
+
+
+check_style:
+		clang-format --style=Google -n *.cc
+		clang-format --style=Google -n *.h
+		clang-format --style=Google -n tests/*.cc
+		clang-format --style=Google -n tests/*.h
+
+style: style_google
+
+style_google:
+		clang-format --style=Google -i *.cc
+		clang-format --style=Google -i *.h
+		clang-format --style=Google -i tests/*.cc
+		clang-format --style=Google -i tests/*.h
+
+style_microsoft:
+		clang-format --style=Microsoft -i *.cc
+		clang-format --style=Microsoft -i *.h
+		clang-format --style=Microsoft -i tests/*.cc
+		clang-format --style=Microsoft -i tests/*.h
+
+style_llvm:
+		clang-format --style=LLVM -i *.cc
+		clang-format --style=LLVM -i *.h
+		clang-format --style=LLVM -i tests/*.cc
+		clang-format --style=LLVM -i tests/*.h
+
+style_chromium:
+		clang-format --style=Chromium -i *.cc
+		clang-format --style=Chromium -i *.h
+		clang-format --style=Chromium -i tests/*.cc
+		clang-format --style=Chromium -i tests/*.h
+
+style_mozilla:
+		clang-format --style=Mozilla -i *.cc
+		clang-format --style=Mozilla -i *.h
+		clang-format --style=Mozilla -i tests/*.cc
+		clang-format --style=Mozilla -i tests/*.h
+
+style_WebKit:
+		clang-format --style=WebKit -i *.cc
+		clang-format --style=WebKit -i *.h
+		clang-format --style=WebKit -i tests/*.cc
+		clang-format --style=WebKit -i tests/*.h
+
 clean:
-		rm -rf *.o *.exe *.out *.oa
+		rm -rf *.o *.exe *.out *.oa *.a
 		rm -rf tests/*.o tests/*.exe tests/*.out
 		rm -rf *.gcno *.gcda
 		rm -rf $(REPORT_DIRECTORY)/*.css $(REPORT_DIRECTORY)/*.html
-		rm -rf $(VALGRIND_REPORT_DIRECTORY)/*.txt
+		rm -rf $(VALGRIND_REPORT_DIRECTORY_FOR_DOCKER_CONTAINER)/*.txt
