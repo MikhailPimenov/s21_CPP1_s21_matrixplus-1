@@ -270,6 +270,18 @@ S21Matrix operator*(const S21Matrix& left, const S21Matrix& right) {
   return result;
 }
 
+S21Matrix operator*(const S21Matrix& left, double right) noexcept {
+    S21Matrix result(left);
+    result.MulNumber(right);
+    return result;
+}
+
+S21Matrix operator*(double left, const S21Matrix& right) noexcept {
+    S21Matrix result(right);
+    result.MulNumber(left);
+    return result;
+}
+
 bool operator==(const S21Matrix& left, const S21Matrix& right) noexcept {
   return left.EqMatrix(right);
 }
