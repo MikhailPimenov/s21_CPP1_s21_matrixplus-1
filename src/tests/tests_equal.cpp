@@ -123,4 +123,97 @@ namespace {
         EXPECT_FALSE(result);
     }
 
+    TEST(EqMatrixOperatorTests, Test5Not) {
+        S21Matrix m1(4, 7);
+        m1.Fill(0.99875);
+        
+        S21Matrix m2(5, 8);
+        m2.Fill(0.99875);
+
+        const bool result = m1 == m2;
+        EXPECT_FALSE(result);
+    }
+
+    TEST(EqMatrixOperatorTests, Test6) {
+        S21Matrix m1({
+            {1.0,  2.0,  3.0,  4.0},
+            {5.0,  6.0,  7.0,  8.0},
+            {9.0, 10.0, 11.0, 12.0},
+        });
+        
+        S21Matrix m2({
+            {1.0,  2.0,  3.0,  4.0},
+            {5.0,  6.0,  7.0,  8.0},
+            {9.0, 10.0, 11.0, 12.0},
+        });
+
+        const bool result = (m1 == m2);
+        EXPECT_TRUE(result);
+    }
+
+    TEST(EqMatrixOperatorTests, Test7) {
+        S21Matrix m1({
+            {1.0,  2.0},
+            {5.0,  6.0},
+            {9.0, 10.0},
+        });
+        
+        S21Matrix m2({
+            {1.0,  2.0},
+            {5.0,  6.0},
+            {9.0, 10.0},
+        });
+
+        const bool result = (m1 == m2);
+        EXPECT_TRUE(result);
+    }
+
+    TEST(EqMatrixOperatorTests, Test8Not) {
+        S21Matrix m1({
+            {1.0,  2.0,  3.0,  4.0},
+            {5.0,  6.0,  7.0,  8.0},
+            {9.0, 10.0, 11.0, 12.0},
+        });
+        
+        S21Matrix m2({
+            {1.0,  2.0,  3.0,  4.0},
+            {5.0,  6.0,  7.0,  8.0},
+        });
+
+        const bool result = (m1 == m2);
+        EXPECT_FALSE(result);
+    }
+
+    TEST(EqMatrixOperatorTests, Test9Not) {
+        S21Matrix m1({
+            {1.0,  2.0,  3.0,  4.0},
+            {5.0,  6.0,  7.0,  8.0},
+            {9.0, 10.0, 11.0, 12.0},
+        });
+        
+        S21Matrix m2({
+            {1.0,  2.0,  3.0},
+            {5.0,  6.0,  7.0},
+            {9.0, 10.0, 11.0},
+        });
+
+        const bool result = (m1 == m2);
+        EXPECT_FALSE(result);
+    }
+
+     TEST(EqMatrixOperatorTests, Test10Not) {
+        S21Matrix m1({
+            {1.0,  2.0,  3.0,  4.0},
+            {5.0,  6.0,  7.0,  8.0},
+            {9.0, 10.0, 11.0, 12.0},
+        });
+        
+        S21Matrix m2({
+            {1.0,  2.0,  3.0},
+            {5.0,  6.0,  7.0},
+        });
+
+        const bool result = (m1 == m2);
+        EXPECT_FALSE(result);
+    }
 }

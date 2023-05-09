@@ -19,11 +19,11 @@ VALGRIND_REPORT_DIRECTORY=valgrind_report
 
 all: build
 
-#TODO
-# s21_matrix_oop.a:
 s21_matrix_oop.a: s21_matrix_oop.oa 
 		ar rcs $@ $^
 
+tests/tests_helpers.o: tests/tests_helpers.cpp s21_matrix_oop.h
+		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
 tests/tests_constructor_assignment.o: tests/tests_constructor_assignment.cpp s21_matrix_oop.h
 		$(CC) -c -o $@ $< $(GTEST_CFLAGS)
 tests/tests_getset.o: tests/tests_getset.cpp s21_matrix_oop.h
@@ -56,33 +56,23 @@ tests/tests_transpose.o: tests/tests_transpose.cpp s21_matrix_oop.h
 tests/tests_main.o: tests/tests_main.cpp s21_matrix_oop.h
 		$(CC) -c -o $@ $< $(GTEST_CFLAGS) $(GCOVR_LFLAGS)
 
-#TODO
 test: tests/tests_main.exe
 		./tests/tests_main.exe
 
 gcov_report: test
 		mkdir -p $(REPORT_DIRECTORY)
-		gcovr . --html --html-details -o $(REPORT_DIRECTORY)/coverage_report.html
+		gcovr . --html --html-details --exclude-lines-by-pattern '.*assert.*' -o $(REPORT_DIRECTORY)/coverage_report.html
 		START "" $(REPORT_DIRECTORY)/coverage_report.functions.html  
 # open $(REPORT_DIRECTORY)/coverage_report.functions.html
 
-
-tests/tests_main.exe: s21_matrix_oop.o tests/tests_main.o tests/tests_sum_subscript.o tests/tests_subtract_subscript.o tests/tests_multiply_subscript.o tests/tests_equal.o tests/tests_transpose.o tests/tests_determinant.o tests/tests_calc_complements.o tests/tests_inverse.o tests/tests_sum.o tests/tests_subtract.o tests/tests_multiply.o tests/tests_brace.o tests/tests_getset.o tests/tests_constructor_assignment.o
+tests/tests_main.exe: s21_matrix_oop.o tests/tests_main.o tests/tests_sum_subscript.o tests/tests_subtract_subscript.o tests/tests_multiply_subscript.o tests/tests_equal.o tests/tests_transpose.o tests/tests_determinant.o tests/tests_calc_complements.o tests/tests_inverse.o tests/tests_sum.o tests/tests_subtract.o tests/tests_multiply.o tests/tests_brace.o tests/tests_getset.o tests/tests_constructor_assignment.o tests/tests_getset.o tests/tests_helpers.o
 		$(CC) -o $@ $^ $(GTEST_LFLAGS) $(GCOVR_LFLAGS)
-		
 
 s21_matrix_oop.o: s21_matrix_oop.cpp s21_matrix_oop.h
 		$(CC) -c $(STRICT_CFLAGS) $< -o $@ $(GCOVR_CFLAGS)
 
-s21_transpose.o: s21_transpose.c s21_matrix.h s21_common.h
-		$(CC) -c $(STRICT_CFLAGS) $< -o $@ $(GCOVR_CFLAGS)
-
 s21_matrix_oop.oa: s21_matrix_oop.cpp s21_matrix_oop.h
 		$(CC) -c $(STRICT_CFLAGS) $< -o $@
-
-
-# s21_create_matrix.oa: s21_create_matrix.c s21_matrix.h
-# 		$(CC) -c $(STRICT_CFLAGS) $< -o $@
 
 valgrind: tests/tests_main.exe
 		mkdir -p $(VALGRIND_REPORT_DIRECTORY)
@@ -133,6 +123,7 @@ style_WebKit:
 		clang-format --style=WebKit -i tests/*.h
 
 clean:
-		rm -rf *.o *.exe *.out *.oa
+		rm -rf *.o *.exe *.out *.oa *.a
 		rm -rf tests/*.o tests/*.exe tests/*.out
 		rm -rf *.gcno *.gcda
+		rm -rf $(REPORT_DIRECTORY)/*.css $(REPORT_DIRECTORY)/*.html
