@@ -362,72 +362,72 @@ TEST(MultiplyMatrixOperatorTests, Test12WrongSize) {
 
   EXPECT_THROW(m1 * m2 * m3 * m4, std::range_error);
 }
-        
-    TEST(MultiplyNumberOperatorTests, Test13) {
-        const S21Matrix m1({
-            {1.05,    2.05,   3.05,     4.05},
-        });
 
-        const double number = 2.0;
-        const S21Matrix expected({
-            {2.1,    4.1,   6.1,     8.1},
-        });
+TEST(MultiplyNumberOperatorTests, Test13) {
+  const S21Matrix m1({
+      {1.05, 2.05, 3.05, 4.05},
+  });
 
-        const S21Matrix actual = m1 * number;
+  const double number = 2.0;
+  const S21Matrix expected({
+      {2.1, 4.1, 6.1, 8.1},
+  });
 
-        EXPECT_TRUE(actual == expected);
-    }
+  const S21Matrix actual = m1 * number;
 
-    TEST(MultiplyNumberOperatorTests, Test14) {
-        const S21Matrix m1({
-            {1.05,    2.05,   3.05,     4.05},
-        });
+  EXPECT_TRUE(actual == expected);
+}
 
-        const double number = 2.0;
-        const S21Matrix expected({
-            {2.1,    4.1,   6.1,     8.1},
-        });
+TEST(MultiplyNumberOperatorTests, Test14) {
+  const S21Matrix m1({
+      {1.05, 2.05, 3.05, 4.05},
+  });
 
-        const S21Matrix actual = number * m1;
+  const double number = 2.0;
+  const S21Matrix expected({
+      {2.1, 4.1, 6.1, 8.1},
+  });
 
-        EXPECT_TRUE(actual == expected);
-    }
+  const S21Matrix actual = number * m1;
 
-    TEST(MultiplyNumberOperatorTests, Test15) {
-        const S21Matrix m1({
-            {1.05,     2.05,    3.05,      4.05},
-            {5.05,     6.05,    7.05,      8.05},
-            {9.05,    10.05,   11.05,     12.05},
-        });
+  EXPECT_TRUE(actual == expected);
+}
 
-        const double number = 2.0;
-        const S21Matrix expected({
-            { 2.1,     4.1,    6.1,      8.1},
-            {10.1,    12.1,   14.1,     16.1},
-            {18.1,    20.1,   22.1,     24.1},
-        });
+TEST(MultiplyNumberOperatorTests, Test15) {
+  const S21Matrix m1({
+      {1.05, 2.05, 3.05, 4.05},
+      {5.05, 6.05, 7.05, 8.05},
+      {9.05, 10.05, 11.05, 12.05},
+  });
 
-        const S21Matrix actual = m1 * number;
+  const double number = 2.0;
+  const S21Matrix expected({
+      {2.1, 4.1, 6.1, 8.1},
+      {10.1, 12.1, 14.1, 16.1},
+      {18.1, 20.1, 22.1, 24.1},
+  });
 
-        EXPECT_TRUE(actual == expected);
-    }
+  const S21Matrix actual = m1 * number;
 
-    TEST(MultiplyNumberOperatorTests, Test16) {
-        const S21Matrix m1({
-            {1.05,     2.05,    3.05,      4.05},
-            {5.05,     6.05,    7.05,      8.05},
-            {9.05,    10.05,   11.05,     12.05},
-        });
+  EXPECT_TRUE(actual == expected);
+}
 
-        const double number = 2.0;
-        const S21Matrix expected({
-            { 2.1,     4.1,    6.1,      8.1},
-            {10.1,    12.1,   14.1,     16.1},
-            {18.1,    20.1,   22.1,     24.1},
-        });
+TEST(MultiplyNumberOperatorTests, Test16) {
+  const S21Matrix m1({
+      {1.05, 2.05, 3.05, 4.05},
+      {5.05, 6.05, 7.05, 8.05},
+      {9.05, 10.05, 11.05, 12.05},
+  });
 
-        const S21Matrix actual = number * m1;
+  const double number = 2.0;
+  const S21Matrix expected({
+      {2.1, 4.1, 6.1, 8.1},
+      {10.1, 12.1, 14.1, 16.1},
+      {18.1, 20.1, 22.1, 24.1},
+  });
 
-        EXPECT_TRUE(actual == expected);
-    }
+  const S21Matrix actual = number * m1;
+
+  EXPECT_TRUE(actual == expected);
+}
 }  // namespace
