@@ -379,4 +379,109 @@ namespace {
             std::range_error
         );
     }
+
+    TEST(AssignmentOperatorTests, Test22AssignmentInitializer) {
+        const S21Matrix m1({
+            {0.1, 0.2, 0.3},
+            {0.4, 0.5, 0.6},
+        });
+
+        S21Matrix actual(m1);
+        actual = {
+            {0.1, 0.2, 0.3, 0.4, 0.5},
+            {1.1, 1.2, 1.3, 1.4, 1.5},
+            {2.1, 2.2, 2.3, 2.4, 2.5},
+            {3.1, 3.2, 3.3, 3.4, 3.5},
+            {4.1, 4.2, 4.3, 4.4, 4.5},
+            {5.1, 5.2, 5.3, 5.4, 5.5},
+        };
+
+        const S21Matrix expected({
+            {0.1, 0.2, 0.3, 0.4, 0.5},
+            {1.1, 1.2, 1.3, 1.4, 1.5},
+            {2.1, 2.2, 2.3, 2.4, 2.5},
+            {3.1, 3.2, 3.3, 3.4, 3.5},
+            {4.1, 4.2, 4.3, 4.4, 4.5},
+            {5.1, 5.2, 5.3, 5.4, 5.5},
+        });
+
+        EXPECT_TRUE(actual == expected);
+    }
+
+    TEST(AssignmentOperatorTests, Test23AssignmentInitializer) {
+        const S21Matrix m1({
+            {0.1, 0.2, 0.3},
+            {0.4, 0.5, 0.6},
+        });
+
+        S21Matrix actual(m1);
+        actual = {
+            {0.1, 0.2, 0.3, 0.4, 0.5},
+            {1.1, 1.2, 1.3, 1.4, 1.5},
+            {2.1, 2.2, 2.3, 2.4, 2.5},
+            {3.1, 3.2, 3.3, 3.4, 3.5},
+            {4.1, 4.2, 4.3, 4.4, 4.5},
+            {5.1, 5.2, 5.3, 5.4, 5.5},
+        };
+
+        const S21Matrix expected({
+            {0.1, 0.2, 0.3, 0.4, 0.5},
+            {1.1, 1.2, 1.3, 1.4, 1.5},
+            {2.1, 2.2, 2.3, 2.4, 2.5},
+            {3.1, 3.2, 3.3, 3.4, 3.5},
+            {4.1, 4.2, 4.3, 4.4, 4.5},
+            {5.1, 5.2, 5.3, 5.4, 5.5},
+        });
+
+        EXPECT_TRUE(actual == expected);
+    }
+
+    TEST(AssignmentOperatorTests, Test24AssignmentInitializer) {
+        const S21Matrix m1({
+            {0.1, 0.2, 0.3},
+            {0.4, 0.5, 0.6},
+        });
+
+        S21Matrix actual(m1);
+        actual = {
+            {0.1, 0.2, 0.3, 0.4, 0.5},
+            {1.1, 1.2, 1.3, 1.4, 1.5},
+        };
+
+        const S21Matrix expected({
+            {0.1, 0.2, 0.3, 0.4, 0.5},
+            {1.1, 1.2, 1.3, 1.4, 1.5},
+        });
+
+        EXPECT_TRUE(actual == expected);
+    }
+
+    TEST(AssignmentOperatorTests, Test25AssignmentInitializer) {
+        const S21Matrix m1({
+            {0.1, 0.2, 0.3},
+            {0.4, 0.5, 0.6},
+        });
+
+        S21Matrix actual(m1);
+        actual = {
+            {0.1, 0.2, 0.3},
+            {1.1, 1.2, 1.3},
+            {2.1, 2.2, 2.3},
+            {3.1, 3.2, 3.3},
+            {4.1, 4.2, 4.3},
+            {5.1, 5.2, 5.3},
+        };
+
+        const S21Matrix expected({
+            {0.1, 0.2, 0.3},
+            {1.1, 1.2, 1.3},
+            {2.1, 2.2, 2.3},
+            {3.1, 3.2, 3.3},
+            {4.1, 4.2, 4.3},
+            {5.1, 5.2, 5.3},
+        });
+
+        EXPECT_TRUE(actual == expected);
+    }
+
 }
