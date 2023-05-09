@@ -94,23 +94,6 @@ S21Matrix& S21Matrix::operator=(const List& list) {
     return *this;
 }
 
-void S21Matrix::allocate(int rows, int columns) {
-    matrix_ = reinterpret_cast<double**>(new char[rows * sizeof(double*) + rows * columns * sizeof(double)]);
-
-    for (int row = 0; row < rows; ++row)
-        *(matrix_ + row) = reinterpret_cast<double*>((reinterpret_cast<double**>((reinterpret_cast<double*>(matrix_) + row * columns)) + rows));
-
-    rows_ = rows;
-    columns_ = columns;
-}
-
-void S21Matrix::deallocate() noexcept {
-    delete[] matrix_;
-    
-    rows_ = 0;
-    columns_ = 0;
-}
-
 void S21Matrix::SetRows(int rows) {
     if (rows == rows_)
         return;
@@ -141,6 +124,10 @@ void S21Matrix::SetRows(int rows) {
     // But it is still up to the compiler which operator to call: operator=(S21Matrix&&) or operator=(const S21Matrix&),
     // so to be sure operator=(S21Matrix&&) will be called casting temporary to r-value reference using std::move
     *this = std::move(temporary);  
+}
+
+int S21Matrix::GetRows() const noexcept {
+    return rows_;
 }
 
 void S21Matrix::SetColumns(int columns) {
@@ -176,17 +163,9 @@ void S21Matrix::SetColumns(int columns) {
     *this = std::move(temporary);  
 }
 
-
-
-int S21Matrix::GetRows() const noexcept {
-    return rows_;
-}
-
 int S21Matrix::GetColumns() const noexcept {
     return columns_;
 }
-
-
 
 bool S21Matrix::EqMatrix(const S21Matrix& other) const noexcept {
     if (rows_ != other.rows_ || columns_ != other.columns_)
@@ -198,7 +177,6 @@ bool S21Matrix::EqMatrix(const S21Matrix& other) const noexcept {
                 return false;
     return true;
 }
-
 
 void S21Matrix::SumMatrix(const S21Matrix& other) {
     if (rows_ != other.rows_ || columns_ != other.columns_)
@@ -348,20 +326,21 @@ void S21Matrix::Print(const char* space, const char* endline) const noexcept {
     }
 }
 
-void S21Matrix::multiply(const S21Matrix& left, const S21Matrix& right, S21Matrix& result) noexcept {
-    const int sum_length = left.columns_;
-    const int rows = left.rows_;
-    const int columns = right.columns_;
+void S21Matrix::allocate(int rows, int columns) {
+    matrix_ = reinterpret_cast<double**>(new char[rows * sizeof(double*) + rows * columns * sizeof(double)]);
 
-    for (int row = 0; row < rows; ++row) {
-        for (int column = 0; column < columns; ++column) {
-            double sum = 0.0;
-            for (int s = 0; s < sum_length; ++s) {
-                sum += left.matrix_[row][s] * right.matrix_[s][column];
-            }
-            result.matrix_[row][column] = sum;
-        }
-    }
+    for (int row = 0; row < rows; ++row)
+        *(matrix_ + row) = reinterpret_cast<double*>((reinterpret_cast<double**>((reinterpret_cast<double*>(matrix_) + row * columns)) + rows));
+
+    rows_ = rows;
+    columns_ = columns;
+}
+
+void S21Matrix::deallocate() noexcept {
+    delete[] matrix_;
+    
+    rows_ = 0;
+    columns_ = 0;
 }
 
 void S21Matrix::copyFromTo(const S21Matrix& source, S21Matrix& destination) noexcept {
@@ -390,6 +369,22 @@ void S21Matrix::copyFromTo(const List& source, S21Matrix& destination) noexcept 
             ++column;
         }
         ++row;
+    }
+}
+
+void S21Matrix::multiply(const S21Matrix& left, const S21Matrix& right, S21Matrix& result) noexcept {
+    const int sum_length = left.columns_;
+    const int rows = left.rows_;
+    const int columns = right.columns_;
+
+    for (int row = 0; row < rows; ++row) {
+        for (int column = 0; column < columns; ++column) {
+            double sum = 0.0;
+            for (int s = 0; s < sum_length; ++s) {
+                sum += left.matrix_[row][s] * right.matrix_[s][column];
+            }
+            result.matrix_[row][column] = sum;
+        }
     }
 }
 
@@ -445,8 +440,7 @@ void S21Matrix::checkAndCorrectIndices(int& row, int& column) const {
         column += columns_;
 }
  
-void S21Matrix::checkIfListIsRectangular(const List& list)
-{
+void S21Matrix::checkIfListIsRectangular(const List& list) {
     const std::size_t rows = list.size();
     if (rows == 0u)
         throw std::range_error("Invalid rows in initializer list!");
