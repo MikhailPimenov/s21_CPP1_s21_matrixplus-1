@@ -196,4 +196,41 @@ namespace {
         EXPECT_EQ(actual.GetColumns(), 4);
     }
 
+
+  TEST(GetSetTests, Test12Same) {
+        S21Matrix actual({
+            {1.0,  2.0,  3.0,  4.0},
+            {5.0,  6.0,  7.0,  8.0},
+            {9.0, 10.0, 11.0, 12.0},
+        });
+        
+        actual.SetColumns(4);
+        const S21Matrix expected({
+            {1.0,  2.0,  3.0,  4.0},
+            {5.0,  6.0,  7.0,  8.0},
+            {9.0, 10.0, 11.0, 12.0},
+        });
+
+        const bool result = (actual == expected);
+        EXPECT_TRUE(result);
+    }
+
+    TEST(GetSetTests, Test13Same) {
+        S21Matrix actual({
+            {1.0,  2.0,  3.0,  4.0},
+            {5.0,  6.0,  7.0,  8.0},
+            {9.0, 10.0, 11.0, 12.0},
+        });
+        
+        actual.SetRows(3);
+        const S21Matrix expected({
+            {1.0,  2.0,  3.0,  4.0},
+            {5.0,  6.0,  7.0,  8.0},
+            {9.0, 10.0, 11.0, 12.0},
+        });
+
+        const bool result = (actual == expected);
+        EXPECT_TRUE(result);
+    }
+
 }
