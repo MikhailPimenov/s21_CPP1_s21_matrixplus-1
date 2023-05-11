@@ -30,7 +30,6 @@ class S21Matrix {
 
   // rule of five
   ~S21Matrix();  // Destructor
-  // TODO: implement copy-swap idiom
   S21Matrix(const S21Matrix& other);
   S21Matrix(S21Matrix&& other);
   S21Matrix& operator=(const S21Matrix& other);
