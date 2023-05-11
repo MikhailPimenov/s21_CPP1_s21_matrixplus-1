@@ -348,7 +348,8 @@ void S21Matrix::allocate(int rows, int columns) {
 
 void S21Matrix::deallocate() noexcept {
     delete[] matrix_;
-    
+    matrix_ = nullptr;
+
     rows_ = 0;
     columns_ = 0;
 }

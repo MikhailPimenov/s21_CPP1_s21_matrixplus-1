@@ -418,4 +418,23 @@ namespace {
 
         EXPECT_TRUE(actual == expected);
     }
+
+    TEST(MultiplyNumberOperatorTests, Test17) {
+        const S21Matrix m1({
+            {1.05,     2.05,    3.05,      4.05},
+            {5.05,     6.05,    7.05,      8.05},
+            {9.05,    10.05,   11.05,     12.05},
+        });
+
+        const double number = -2.0;
+        const S21Matrix expected({
+            { -2.1,     -4.1,    -6.1,      -8.1},
+            {-10.1,    -12.1,   -14.1,     -16.1},
+            {-18.1,    -20.1,   -22.1,     -24.1},
+        });
+
+        const S21Matrix actual = number * m1;
+
+        EXPECT_TRUE(actual == expected);
+    }
 }
