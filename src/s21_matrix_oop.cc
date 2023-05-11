@@ -344,11 +344,11 @@ void S21Matrix::allocate(int rows, int columns) {
 }
 
 void S21Matrix::deallocate() noexcept {
-    delete[] matrix_;
-    matrix_ = nullptr;
+  delete[] matrix_;
+  matrix_ = nullptr;
 
-    rows_ = 0;
-    columns_ = 0;
+  rows_ = 0;
+  columns_ = 0;
 }
 
 void S21Matrix::copyFromTo(const S21Matrix& source,
